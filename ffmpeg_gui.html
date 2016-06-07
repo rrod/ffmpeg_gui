@@ -1,0 +1,839 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>GUI for FFMPEG</title>
+  <link rel="stylesheet" href="ffmpeg_gui.css"></link>
+</head>
+
+<body>
+  <div id="top_nav_menu" style="color:#555">
+    <span id="view_files" class="top_nav">View Files</span> |
+    <span id="button_convert" class="top_nav">Export</span> |
+    <span id="button_help" class="top_nav"><s>Help</s></span>
+  </div>
+</body>
+</html>
+
+<script>
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// KEEP/REMOVE AUDIO AND VIDEO BUTTONS
+var keep_audio = 1;
+var keep_video = 1;
+function generate_no_audio_no_video_buttons(){
+  const button_no_audio = document.createElement("div");
+    button_no_audio.id = "button_no_audio";
+    button_no_audio.className = "button_custom";
+    button_no_audio.style.top = "95%";
+    button_no_audio.style.left = "80%";
+    button_no_audio.style.height = "4%";
+    button_no_audio.style.backgroundColor = "#0a0";
+    button_no_audio.innerHTML = "Keep Audio &radic;";
+    main_window_bkgd.appendChild(button_no_audio);
+
+  const button_no_audio_cover = document.createElement("div");
+    button_no_audio_cover.id = "button_no_audio_cover";
+    button_no_audio_cover.className = "button_custom";
+    button_no_audio_cover.style.top = button_no_audio.style.top;
+    button_no_audio_cover.style.left = button_no_audio.style.left;
+    button_no_audio_cover.style.height = button_no_audio.style.height;
+    button_no_audio_cover.style.width = button_no_audio.style.width;
+    button_no_audio_cover.style.backgroundColor = "rgba(0,0,0,0)";
+    main_window_bkgd.appendChild(button_no_audio_cover);
+
+  const button_no_video = document.createElement("div");
+    button_no_video.id = "button_no_video";
+    button_no_video.className = "button_custom";
+    button_no_video.style.top = "95%";
+    button_no_video.style.left = "90%";
+    button_no_video.style.height = "4%";
+    button_no_video.style.backgroundColor = "#0a0";
+    button_no_video.innerHTML = "Keep Video &radic;";
+    main_window_bkgd.appendChild(button_no_video);
+
+  const button_no_video_cover = document.createElement("div");
+    button_no_video_cover.id = "button_no_video_cover";
+    button_no_video_cover.className = "button_custom";
+    button_no_video_cover.style.top = button_no_video.style.top;
+    button_no_video_cover.style.left = button_no_video.style.left;
+    button_no_video_cover.style.height = button_no_video.style.height;
+    button_no_video_cover.style.width = button_no_video.style.width;
+    button_no_video_cover.style.backgroundColor = "rgba(0,0,0,0)";
+    main_window_bkgd.appendChild(button_no_video_cover);
+
+    button_no_audio_cover.onclick = function(){
+      var request = new XMLHttpRequest();
+      request.open("POST", "/get_no_audio", true);
+      switch(keep_audio){
+        case 0:
+          button_no_audio.style.backgroundColor = "#a00";
+          button_no_audio.innerHTML = "Remove Audio &radic;";
+
+          request.send(keep_audio);
+
+          keep_audio = 1;
+          break;
+        case 1:
+          button_no_audio.style.backgroundColor = "#0a0";
+          button_no_audio.innerHTML = "Keep Audio &radic;";
+
+          request.send(keep_audio);
+
+          keep_audio = 0;
+          break;
+        default:
+          console.log("Error with 'keep_audio' button.");
+      }
+    }
+
+    button_no_video_cover.onclick = function(){
+      var request = new XMLHttpRequest();
+      request.open("POST", "/get_no_video", true);
+      switch(keep_video){
+        case 0:
+          button_no_video.style.backgroundColor = "#a00";
+          button_no_video.innerHTML = "Remove Video &radic;";
+
+          request.send(keep_video);
+
+          keep_video = 1;
+          break;
+        case 1:
+          button_no_video.style.backgroundColor = "#0a0";
+          button_no_video.innerHTML = "Keep Video &radic;";
+
+          request.send(keep_video);
+
+          keep_video = 0;
+          break;
+        default:
+          console.log("Error with 'keep_video' button.");
+      }
+    }
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// KEEP/REMOVE AUDIO AND VIDEO BUTTONS
+var output_quality = 1;
+function generate_quality_buttons(){
+  const button_output_quality = document.createElement("div");
+    button_output_quality.id = "button_output_quality";
+    button_output_quality.className = "button_custom";
+    button_output_quality.style.top = "95%";
+    button_output_quality.style.left = "70%";
+    button_output_quality.style.height = "4%";
+    button_output_quality.style.backgroundColor = "#0a0";
+    button_output_quality.innerHTML = "High Quality &radic;";
+    main_window_bkgd.appendChild(button_output_quality);
+
+  const button_output_quality_cover = document.createElement("div");
+    button_output_quality_cover.id = "button_output_quality_cover";
+    button_output_quality_cover.className = "button_custom";
+    button_output_quality_cover.style.top = button_output_quality.style.top;
+    button_output_quality_cover.style.left = button_output_quality.style.left;
+    button_output_quality_cover.style.height = button_output_quality.style.height;
+    button_output_quality_cover.style.width = button_output_quality.style.width;
+    button_output_quality_cover.style.backgroundColor = "rgba(0,0,0,0)";
+    button_output_quality_cover.onclick = function(){
+      var request = new XMLHttpRequest();
+      request.open("POST", "/get_output_quality", true);
+      switch(output_quality){
+        case 0:
+          button_output_quality.style.backgroundColor = "#a00";
+          button_output_quality.innerHTML = "Low Quality &radic;";
+
+          request.send(output_quality);
+
+          output_quality = 1;
+          break;
+        case 1:
+          button_output_quality.style.backgroundColor = "#0a0";
+          button_output_quality.innerHTML = "High Quality &radic;";
+
+          request.send(output_quality);
+
+          output_quality = 0;
+          break;
+        default:
+          console.log("Error with 'output_quality' button.");
+      }
+    }
+    main_window_bkgd.appendChild(button_output_quality_cover);
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+var list_of_available_files = "";
+function view_available_files(){
+ var request = new XMLHttpRequest();
+ request.open("GET", "/get_available_files", true);
+ request.send();
+
+ setTimeout(function(){
+   list_of_available_files = request.response;
+   update_list_of_available_files();
+ }, 200)
+}
+view_available_files();
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const copy_options = document.createElement("div");
+  copy_options.id = "copy_options";
+  copy_options.style.position = "absolute";
+  copy_options.style.top = "1%";
+  copy_options.style.left = "5%";
+  copy_options.style.backgroundColor = "#0c8";
+  copy_options.style.color = "#000";
+
+function copy_to(filetype){
+  cut_file();
+  var request = new XMLHttpRequest();
+  request.open("POST", "/copy_to", true);
+  request.send(JSON.stringify([metadata_filename, filetype, new_cut]));
+}
+
+var show_copy_options = 0;
+var expected_file_size_3gp = 0;
+var expected_file_size_avi = 0;
+var expected_file_size_flv = 0;
+var expected_file_size_m4a = 0;
+var expected_file_size_mp3 = 0;
+var expected_file_size_mp4 = 0;
+var expected_file_size_webm = 0;
+function convert(value){
+  show_copy_options = value;
+  function show_options(){
+    if (value === 1){
+      var copy_options_list_filetypes = ["3gp", "avi", "flv", "m4a", "mp3", "mp4", "webm"];
+      var copy_options_list_expected_file_size = [];
+      var copy_options_list_functions = [];
+      for (var n = 0, len = copy_options_list_filetypes.length; n < len; n++){
+        copy_options_list_expected_file_size[n] = 0;
+        copy_options_list_functions[n] = "copy_to(metadata_filename, " + copy_options_list_filetypes[n] + "";
+      }
+
+      var copy_options_list1 = [];
+      for (var n = 0, len = copy_options_list_filetypes.length; n < len; n++){
+        copy_options_list1[n] = "<tr><td onclick='copy_to(\"" + copy_options_list_filetypes[n] + "\")'>> " + copy_options_list_filetypes[n] + " (" + copy_options_list_expected_file_size[n] + " mb)</td></tr>";
+      }
+      var copy_options_list2 = "<table width=100%>" + copy_options_list1 + "</table>";
+
+      copy_options.innerHTML = copy_options_list2.replace(/,/g,"");
+      main_window_bkgd.appendChild(copy_options);
+    } else{
+      setTimeout(function(){
+        copy_options.innerHTML = "";
+      }, 3000);
+    }
+  }
+  show_options();
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const button_convert = document.getElementById("button_convert");
+  button_convert.onmouseover = function(){ convert(1); };
+  button_convert.onmouseout = function(){ convert(0); };
+
+const view_files = document.getElementById("view_files");
+  view_files.addEventListener("click", view_available_files);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// TOP NAV
+// background
+const top_nav_bkgd_height = 5;
+
+const top_nav_bkgd = document.createElement("div");
+  top_nav_bkgd.id = "top_nav_bkgd";
+  top_nav_bkgd.style.position = "absolute";
+  top_nav_bkgd.style.top = 0;
+  top_nav_bkgd.style.left = 0;
+  top_nav_bkgd.style.width = "100%";
+  top_nav_bkgd.style.height = top_nav_bkgd_height + "%";
+  top_nav_bkgd.style.backgroundColor = "rgba(0,0,0,0)";
+  document.body.appendChild(top_nav_bkgd);
+
+  document.getElementById("top_nav_bkgd").appendChild(top_nav_menu);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const top_nav = document.getElementById("top_nav_menu");
+  top_nav.style.position = "absolute";
+  top_nav.style.top = "40%";
+  top_nav.style.left = "1%";
+  top_nav.style.width = "99%";
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const main_window_bkgd_height = 100 - top_nav_bkgd_height;
+
+var main_window_bkgd = document.createElement("div");
+  main_window_bkgd.id = "main_window_bkgd";
+  main_window_bkgd.style.position = "absolute";
+  main_window_bkgd.style.top = top_nav_bkgd_height + "%";
+  main_window_bkgd.style.left = 0;
+  main_window_bkgd.style.width = "100%";
+  main_window_bkgd.style.height = main_window_bkgd_height + "%";
+  main_window_bkgd.style.color = "#fff";
+  document.body.appendChild(main_window_bkgd);
+
+  main_window_bkgd = document.getElementById("main_window_bkgd");
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// multimedia player elements
+const multimedia_player = document.createElement("video");
+  multimedia_player.id = "multimedia_player";
+  multimedia_player.style.position = "absolute";
+  multimedia_player.style.top = "1%";
+  multimedia_player.style.left = "20%";
+  multimedia_player.style.height = "79%";
+  multimedia_player.style.width = "79%";
+  multimedia_player.style.border = "1px solid #000";
+  multimedia_player.controls = false;
+  multimedia_player.style.backgroundColor = "#000";
+  main_window_bkgd.appendChild(multimedia_player);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const file_metadata_background = document.createElement("div");
+  file_metadata_background.id = "file_metadata_background";
+  file_metadata_background.style.position = "absolute";
+  file_metadata_background.style.top = "80%";
+  file_metadata_background.style.left = "1%";
+  file_metadata_background.style.height = "10%";
+  file_metadata_background.style.width = "17%";
+  file_metadata_background.style.backgroundColor = "#233";
+  file_metadata_background.style.border = "1px solid #000";
+  file_metadata_background.style.color = "#fff";
+  file_metadata_background.style.padding = "8px";
+  file_metadata_background.style.textAlign = "center";
+  file_metadata_background.innerHTML = "<strong>FILE DATA</strong>";
+  main_window_bkgd.appendChild(file_metadata_background);
+
+const file_metadata = document.createElement("div");
+  file_metadata.id = "file_metadata";
+  file_metadata.style.position = "absolute";
+  file_metadata.style.top = "84%";
+  file_metadata.style.left = "1%";
+  file_metadata.style.height = "15%";
+  file_metadata.style.width = "18%";
+  file_metadata.style.backgroundColor = "#222";
+  file_metadata.style.border = "1px solid #000";
+  file_metadata.style.color = "#fff";
+  file_metadata.style.overflowY = "scroll";
+  main_window_bkgd.appendChild(file_metadata);
+
+var metadata_filename = multimedia_player.src.substr(42);
+setTimeout(function(){
+  file_metadata.innerHTML = "\
+    Filename: " + metadata_filename + "<br>\
+    Duration: " + multimedia_player.duration + " seconds<br>\
+    ";
+    update_metadata();
+},500);
+
+function update_metadata(filename, duration){
+  metadata_filename = filename;
+
+  setTimeout(function(){
+    file_metadata.innerHTML = "\
+      Filename: " + metadata_filename + "<br>\
+      Duration: " + multimedia_player.duration.toFixed(2) + " seconds<br>\
+      ";
+  },500);
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const available_files_list_background = document.createElement("div");
+  available_files_list_background.id = "available_files_list_background";
+  available_files_list_background.style.position = "absolute";
+  available_files_list_background.style.top = "1%";
+  available_files_list_background.style.left = "1%";
+  available_files_list_background.style.height = "70%";
+  available_files_list_background.style.width = "17%";
+  available_files_list_background.style.backgroundColor = "#233";
+  available_files_list_background.style.border = "1px solid #000";
+  available_files_list_background.style.color = "#fff";
+  available_files_list_background.style.padding = "8px";
+  available_files_list_background.style.textAlign = "center";
+  available_files_list_background.innerHTML = "\
+    <strong><center>AVAILABLE FILES</center></strong>\
+    ";
+  main_window_bkgd.appendChild(available_files_list_background);
+
+const available_files_list = document.createElement("div");
+  available_files_list.id = "available_files_list";
+  available_files_list.style.position = "absolute";
+  available_files_list.style.top = "5%";
+  available_files_list.style.left = "1%";
+  available_files_list.style.height = "74%";
+  available_files_list.style.width = "18%";
+  available_files_list.style.backgroundColor = "#222";
+  available_files_list.style.border = "1px solid #000";
+  available_files_list.style.color = "#fff";
+  available_files_list.style.overflowY = "scroll";
+  main_window_bkgd.appendChild(available_files_list);
+
+function switch_file(filename, name){
+  multimedia_player.src = filename;
+  update_metadata(filename);
+}
+
+function update_list_of_available_files(){
+  var check = list_of_available_files.search(",");
+  var available_file = [];
+  var available_file2 = list_of_available_files.split(",");
+  var available_table1 = "<table>";
+  var available_table2 = [];
+  for (var n = 0, len = available_file2.length; n < len; n++){
+    available_table2[n] = "<tr><td onclick='switch_file(\"" +
+      available_file2[n] + "\")' class='available_file_css'>" +
+      available_file2[n] + "</td></tr>";
+    available_file[n] = "<div onclick='switch_file(\"" +
+      available_file2[n] + "\")' class='available_file_css'>> " +
+      available_file2[n] + "</div>";
+  }
+  var available_table3 = "<table width=100%>" + available_table2 + "</table>";
+
+  // remove excess commas
+  var available_table4 = available_table3.replace(/,/g,"");
+  var o = 0;
+
+  available_files_list.innerHTML = available_table4;
+
+  // set the first file in the list of available files to automatically load
+  switch_file(available_file2[0]);
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+var click_check = 0;
+var duration = 0;
+function generate_duration_bar(){
+  // duration bar
+  var duration_bar = document.createElement("div");
+    duration_bar.id = "duration_bar";
+    duration_bar.style.position = "absolute";
+    duration_bar.style.top = "80%";
+    duration_bar.style.left = "20%";
+    duration_bar.style.height = "9%";
+    duration_bar.style.width = "79%";
+    duration_bar.style.border = "1px solid #000";
+    duration_bar.style.backgroundColor = "#222";
+    main_window_bkgd.appendChild(duration_bar);
+
+  var duration_bar_progress = document.createElement("div");
+    duration_bar_progress.id = "duration_bar_progress";
+    duration_bar_progress.style.position = "absolute";
+    duration_bar_progress.style.top = 0;
+    duration_bar_progress.style.left = 0;
+    duration_bar_progress.style.height = "100%";
+    duration_bar_progress.style.width = 0 + "%";
+    duration_bar_progress.style.backgroundColor = "#0c8";
+    document.getElementById("duration_bar").appendChild(duration_bar_progress);
+
+  var duration_bar_progress_autoplay = document.createElement("div");
+    duration_bar_progress_autoplay.id = "duration_bar_progress_autoplay";
+    duration_bar_progress_autoplay.style.position = "absolute";
+    duration_bar_progress_autoplay.style.top = 0;
+    duration_bar_progress_autoplay.style.left = 0;
+    duration_bar_progress_autoplay.style.height = "10%";
+    duration_bar_progress_autoplay.style.width = 0;
+    duration_bar_progress_autoplay.style.backgroundColor = "#ff0";
+    document.getElementById("duration_bar").appendChild(duration_bar_progress_autoplay);
+
+  var duration_bar_cover = document.createElement("div");
+    duration_bar_cover.id = "duration_bar_cover";
+    duration_bar_cover.style.position = "absolute";
+    duration_bar_cover.style.top = 0;
+    duration_bar_cover.style.left = 0;
+    duration_bar_cover.style.height = "100%";
+    duration_bar_cover.style.width = "100%";
+    duration_bar_cover.style.backgroundColor = "rgba(200,50,50,0)";
+    duration_bar_cover.style.zIndex = 2;
+    document.getElementById("duration_bar").appendChild(duration_bar_cover);
+
+  const duration_bar_cover_width = duration_bar_cover.offsetWidth;
+    duration_bar_cover.onclick = function(event){
+      // get horizontal x-position of click
+      var get_mouse_coord_x = event.clientX - duration_bar.offsetLeft;
+
+      // adjust to percentage of duration_bar
+      var new_progress =
+        Math.round((get_mouse_coord_x / duration_bar_cover_width) * 100) + "%";
+      var new_progress =
+        Math.round((get_mouse_coord_x / duration_bar_cover_width) * 100);
+
+      // adjust duration_bar_progress width to that approximate point
+      duration_bar_progress.style.width = new_progress  + "%";
+
+      // adjust media file to new point
+      multimedia_player.currentTime =
+        multimedia_player.duration *
+        (get_mouse_coord_x / duration_bar_cover_width);
+
+      // submit values for editing
+      if (click_check === 0){
+        click_one = multimedia_player.currentTime;
+        document.getElementById("time_start").innerHTML = "Start Time (-ss)<br>" + click_one.toFixed(2);
+
+        click_check = 1;
+      } else{
+        click_two = multimedia_player.currentTime;
+        duration = click_two - click_one;
+        document.getElementById("time_duration").innerHTML = "Duration (-t)<br>" + duration.toFixed(2);
+        document.getElementById("time_end").innerHTML = "End Time<br>" + click_two.toFixed(2);
+
+        click_check = 0;
+      }
+    };
+}
+setTimeout(function(){
+  generate_duration_bar();
+}, 1000);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+var click_one = 0;
+var click_two = 0;
+var new_cut = "";
+function cut_file(){
+  if ((click_one - click_two) < 0){
+    // convert to hh:mm:ss time
+    var click_one_hours = parseInt(click_one / 3600);
+    var click_one_minutes = parseInt(click_one / 60) % 60;
+    var click_one_seconds = click_one % 60;
+    var click_one_final = "00" + ":" + click_one_minutes + ":" + click_one_seconds.toFixed(1);
+
+    click_two = click_two - click_one; // calculate the time length to cut
+    var click_two_hours = parseInt(click_two / 3600);
+    var click_two_minutes = parseInt(click_two / 60) % 60;
+    var click_two_seconds = click_two % 60;
+    var click_two_final = "00" + ":" + click_two_minutes + ":" + click_two_seconds.toFixed(1);
+
+    new_cut = " -ss " + click_one_final + " -t " + click_two_final + " ";
+  }
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+const time_reset = document.createElement("div");
+  time_reset.id = "time_reset";
+  time_reset.className = "button_custom";
+  time_reset.style.top = "90%";
+  time_reset.style.left = "20%";
+  time_reset.style.height = "3%";
+  time_reset.style.width = "29%";
+  time_reset.innerHTML = "Reset Timers";
+  time_reset.onclick = function(){
+    time_duration.innerHTML = "Duration (-t)<br>";
+    time_start.innerHTML = "Start Time (-ss)<br>";
+    time_end.innerHTML = "End Time<br>";
+
+    click_one = 0;
+    click_two = 0;
+    new_cut = "";
+  }
+  main_window_bkgd.appendChild(time_reset);
+
+const time_duration = document.createElement("div");
+  time_duration.id = "time_duration";
+  time_duration.className = "button_custom";
+  time_duration.style.top = "94%";
+  time_duration.style.left = "20%";
+  time_duration.style.height = "5%";
+  time_duration.innerHTML = "Duration (-t)<br>";
+  main_window_bkgd.appendChild(time_duration);
+
+const time_start = document.createElement("div");
+  time_start.id = "time_start";
+  time_start.className = "button_custom";
+  time_start.style.top = "94%";
+  time_start.style.left = "30%";
+  time_start.style.height = "5%";
+  time_start.innerHTML = "Start Time (-ss)<br>";
+  main_window_bkgd.appendChild(time_start);
+
+const time_end = document.createElement("div");
+  time_end.id = "time_end";
+  time_end.className = "button_custom";
+  time_end.style.top = "94%";
+  time_end.style.left = "40%";
+  time_end.style.height = "5%";
+  time_end.innerHTML = "End Time<br>";
+  main_window_bkgd.appendChild(time_end);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// multimedia player elements
+var get_media_playpause = 0;
+var multimedia_control_colors = ["#00c", "#220"];
+const multimedia_control_playpause = document.createElement("div");
+  multimedia_control_playpause.id = "multimedia_control_playpause";
+  multimedia_control_playpause.className = "button_custom";
+  multimedia_control_playpause.style.top = "95%";
+  multimedia_control_playpause.style.left = "50%";
+  multimedia_control_playpause.style.height = "4%";
+  multimedia_control_playpause.innerHTML = "Play";
+  multimedia_control_playpause.style.backgroundColor = multimedia_control_colors[0];
+  main_window_bkgd.appendChild(multimedia_control_playpause);
+
+  multimedia_control_playpause.onclick = function(){
+    switch(get_media_playpause){
+      case 0:
+        multimedia_player.play();
+        multimedia_control_playpause.innerHTML = "Pause";
+        multimedia_control_playpause.style.backgroundColor = multimedia_control_colors[1];
+
+        // run autoplay duration bar
+        (function run_autoplay_duration_bar(){
+          document.getElementById("duration_bar_progress_autoplay").style.width = ((multimedia_player.currentTime / multimedia_player.duration) * 100) + "%";
+          requestAnimationFrame(run_autoplay_duration_bar);
+        })();
+
+        get_media_playpause = 1;
+        break;
+      case 1:
+        multimedia_player.pause();
+        multimedia_control_playpause.innerHTML = "Play";
+        multimedia_control_playpause.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_playpause = 0;
+        break;
+      default:
+        console.log("Error with 'playpause' button.");
+    }
+  }
+
+var get_media_mute = 0;
+const multimedia_control_mute = document.createElement("div");
+  multimedia_control_mute.id = "multimedia_control_mute";
+  multimedia_control_mute.className = "button_custom";
+  multimedia_control_mute.style.top = "95%";
+  multimedia_control_mute.style.left = "60%";
+  multimedia_control_mute.style.height = "4%";
+  multimedia_control_mute.innerHTML = "Mute";
+  multimedia_control_mute.style.backgroundColor = multimedia_control_colors[0];
+  main_window_bkgd.appendChild(multimedia_control_mute);
+
+  multimedia_control_mute.onclick = function(){
+    switch(get_media_mute){
+      case 0:
+        multimedia_player.muted = true;
+        multimedia_control_mute.innerHTML = "Unmute";
+        multimedia_control_mute.style.backgroundColor = multimedia_control_colors[1];
+
+        get_media_mute = 1;
+        break;
+      case 1:
+        multimedia_player.muted = false;
+        multimedia_control_mute.innerHTML = "Mute";
+        multimedia_control_mute.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_mute = 0;
+        break;
+      default:
+        console.log("Error with 'mute' button.");
+    }
+  }
+
+var get_media_loop = 0;
+const multimedia_control_loop = document.createElement("div");
+  multimedia_control_loop.id = "multimedia_control_loop";
+  multimedia_control_loop.className = "button_custom";
+  multimedia_control_loop.style.top = "90%";
+  multimedia_control_loop.style.left = "50%";
+  multimedia_control_loop.style.height = "4%";
+  multimedia_control_loop.innerHTML = "Looping On";
+  multimedia_control_loop.style.backgroundColor = multimedia_control_colors[0];
+  main_window_bkgd.appendChild(multimedia_control_loop);
+
+  // set initial state
+  multimedia_player.loop = true;
+
+  multimedia_control_loop.onclick = function(){
+    switch(get_media_loop){
+      case 0:
+        multimedia_player.loop = false;
+        multimedia_control_loop.innerHTML = "Looping Off";
+        multimedia_control_loop.style.backgroundColor = multimedia_control_colors[1];
+
+        get_media_loop = 1;
+        break;
+      case 1:
+        multimedia_player.loop = true;
+        multimedia_control_loop.innerHTML = "Looping On";
+        multimedia_control_loop.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_loop = 0;
+        break;
+      default:
+        console.log("Error with 'loop' button.");
+    }
+  }
+
+var get_media_speed = 1;
+const multimedia_control_speed = document.createElement("div");
+  multimedia_control_speed.id = "multimedia_control_speed";
+  multimedia_control_speed.className = "button_custom";
+  multimedia_control_speed.style.top = "90%";
+  multimedia_control_speed.style.left = "60%";
+  multimedia_control_speed.style.height = "4%";
+  multimedia_control_speed.innerHTML = "Speed (1.0x)";
+  multimedia_control_speed.style.backgroundColor = multimedia_control_colors[0];
+  main_window_bkgd.appendChild(multimedia_control_speed);
+
+  // set initial state
+  multimedia_player.playbackRate = 1.0;
+
+  multimedia_control_speed.onclick = function(){
+    switch(get_media_speed){
+      case 0:
+        multimedia_player.playbackRate = 0.5;
+        multimedia_control_speed.innerHTML = "Speed (0.5x)";
+        multimedia_control_speed.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_speed = 1;
+        break;
+      case 1:
+        multimedia_player.playbackRate = 1.0;
+        multimedia_control_speed.innerHTML = "Speed (1.0x)";
+        multimedia_control_speed.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_speed = 2;
+        break;
+      case 2:
+        multimedia_player.playbackRate = 1.5;
+        multimedia_control_speed.innerHTML = "Speed (1.5x)";
+        multimedia_control_speed.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_speed = 3;
+        break;
+      case 3:
+        multimedia_player.playbackRate = 2.0;
+        multimedia_control_speed.innerHTML = "Speed (2.0x)";
+        multimedia_control_speed.style.backgroundColor = multimedia_control_colors[0];
+
+        get_media_speed = 0;
+        break;
+      default:
+        console.log("Error with 'loop' button.");
+    }
+  }
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+var get_output_dimensions = 4;
+const output_dimensions = document.createElement("div");
+  output_dimensions.id = "output_dimensions";
+  output_dimensions.className = "button_custom";
+  output_dimensions.style.top = "90%";
+  output_dimensions.style.left = "70%";
+  output_dimensions.style.height = "4%";
+  output_dimensions.style.width = "29%";
+  output_dimensions.innerHTML = "Display Resolution: no change";
+  main_window_bkgd.appendChild(output_dimensions);
+
+  output_dimensions.onclick = function(){
+    switch(get_output_dimensions){
+      case 0:
+        output_dimensions.innerHTML = "Display Resolution: 320x240";
+        output_dimensions.style.backgroundColor = "#622";
+
+        get_output_dimensions = 1;
+        break;
+      case 1:
+        output_dimensions.innerHTML = "Display Resolution: 640x480";
+        output_dimensions.style.backgroundColor = "#622";
+
+        get_output_dimensions = 2;
+        break;
+      case 2:
+        output_dimensions.innerHTML = "Display Resolution: 1280x720";
+        output_dimensions.style.backgroundColor = "#622";
+
+        get_output_dimensions = 3;
+        break;
+      case 3:
+        output_dimensions.innerHTML = "Display Resolution: 1920x1080";
+        output_dimensions.style.backgroundColor = "#622";
+
+        get_output_dimensions = 4;
+        break;
+      case 4:
+        output_dimensions.innerHTML = "Display Resolution: no change";
+        output_dimensions.style.backgroundColor = "#222";
+
+        get_output_dimensions = 0;
+        break;
+      default:
+        console.log("Error with 'resolution/dimension' button.");
+    }
+  }
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// show the list of available files in the directory when the app runs
+setTimeout(function(){
+  view_available_files();
+  update_metadata();
+  generate_quality_buttons();
+  generate_no_audio_no_video_buttons();
+},500);
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+</script>
