@@ -2,6 +2,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 var click_one = 0;
 var click_two = 0;
+
+// used for locking in timer values
+var click_one_locked = 0;
+var click_two_locked = 0;
+
 var new_cut = "";
 function cut_file(){
   if ((click_one - click_two) < 0){
@@ -60,7 +65,16 @@ const time_start = document.createElement("div");
   time_start.style.top = "94%";
   time_start.style.left = "30%";
   time_start.style.height = "5%";
+  time_start.style.color = "#fff";
   time_start.innerHTML = "Start Time (-ss)<br>";
+  time_start.onclick = function(){ // locks in the starting time
+    if (time_start.style.color === "rgb(255, 255, 255)"){
+      click_one_locked = click_one.toFixed(3);
+      time_start.style.color = "#f00";
+    }else{
+      time_start.style.color = "#fff";
+    }
+  }
   main_window_bkgd.appendChild(time_start);
 
 const time_end = document.createElement("div");
@@ -69,7 +83,16 @@ const time_end = document.createElement("div");
   time_end.style.top = "94%";
   time_end.style.left = "40%";
   time_end.style.height = "5%";
+  time_end.style.color = "#fff";
   time_end.innerHTML = "End Time<br>";
+  time_end.onclick = function(){ // locks in the ending time
+    if (time_end.style.color === "rgb(255, 255, 255)"){
+      click_two_locked = click_two.toFixed(3);
+      time_end.style.color = "#f00";
+    }else{
+      time_end.style.color = "#fff";
+    }
+  }
   main_window_bkgd.appendChild(time_end);
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

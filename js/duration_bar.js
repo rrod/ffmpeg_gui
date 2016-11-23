@@ -59,6 +59,7 @@ function generate_duration_bar(){
 
       // adjust duration_bar_progress width to that approximate point
       duration_bar_progress.style.width = new_progress  + "%";
+      duration_bar_progress_autoplay.style.width = new_progress + "%";
 
       // adjust media file to new point
       multimedia_player.currentTime =
@@ -67,15 +68,35 @@ function generate_duration_bar(){
 
       // submit values for editing
       if (click_check === 0){
-        click_one = multimedia_player.currentTime;
-        document.getElementById("time_start").innerHTML = "Start Time (-ss)<br>" + click_one.toFixed(2);
+        if (time_start.style.color === "rgb(255, 0, 0)"){
+          click_one = click_one_locked;
+        }else{
+          click_one = multimedia_player.currentTime;
+        }
+
+        // click_one = multimedia_player.currentTime;
+        document.getElementById("time_start").innerHTML = "<font color='#fff'>Start Time (-ss)</font><br>" + click_one.toFixed(3);
 
         click_check = 1;
-      } else{
-        click_two = multimedia_player.currentTime;
+      }else{
+        // click_two = multimedia_player.currentTime;
+        if (time_end.style.color === "rgb(255, 0, 0)"){
+          click_two = click_two_locked;
+
+          // these two lines are copied from above because the duration bar
+          // breaks for some reason when this event happens
+          // but if we add these two lines from above then it fixes
+          // otherwise the duration bar will never set the new click_one value
+          click_one = multimedia_player.currentTime;
+          document.getElementById("time_start").innerHTML = "Start Time (-ss)<br>" + click_one.toFixed(3);
+        }else{
+          click_two = multimedia_player.currentTime;
+        }
+
         duration = click_two - click_one;
-        document.getElementById("time_duration").innerHTML = "Duration (-t)<br>" + duration.toFixed(2);
-        document.getElementById("time_end").innerHTML = "End Time<br>" + click_two.toFixed(2);
+        document.getElementById("time_duration").innerHTML = "Duration (-t)<br>" + duration.toFixed(3);
+
+        document.getElementById("time_end").innerHTML = "<font color='#fff'>End Time</font><br>" + click_two.toFixed(3);
 
         click_check = 0;
       }
