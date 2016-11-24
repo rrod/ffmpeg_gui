@@ -56,7 +56,7 @@ const time_duration = document.createElement("div");
   time_duration.style.top = "94%";
   time_duration.style.left = "20%";
   time_duration.style.height = "5%";
-  time_duration.innerHTML = "Duration (-t)<br>";
+  time_duration.innerHTML = "Duration<br>";
   main_window_bkgd.appendChild(time_duration);
 
 const time_start = document.createElement("div");
@@ -66,11 +66,12 @@ const time_start = document.createElement("div");
   time_start.style.left = "30%";
   time_start.style.height = "5%";
   time_start.style.color = "#fff";
-  time_start.innerHTML = "Start Time (-ss)<br>";
+  time_start.innerHTML = "Start Time<br>";
   time_start.onclick = function(){ // locks in the starting time
     if (time_start.style.color === "rgb(255, 255, 255)"){
       click_one_locked = click_one.toFixed(3);
       time_start.style.color = "#f00";
+      // time_start.innerHTML = "<font color='#f00'>Start Time</font><br>" + click_one.toFixed(3);
     }else{
       time_start.style.color = "#fff";
     }

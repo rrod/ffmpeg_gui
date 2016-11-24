@@ -41,9 +41,18 @@ function update_metadata(filename, duration){
   metadata_filename = filename;
 
   setTimeout(function(){
+    var file_duration_hours = multimedia_player.duration.toFixed(3) / 3600;
+    var file_duration_minutes = (multimedia_player.duration.toFixed(3) / 60) % 60;
+    var file_duration_seconds = multimedia_player.duration.toFixed(3) % 60;
+    var file_duration_final = file_duration_hours.toFixed(0) + "h" + " " + file_duration_minutes.toFixed(0) + "m " + file_duration_seconds.toFixed(3) + "s";
+
     file_metadata.innerHTML = "\
       Filename: " + metadata_filename + "<br>\
-      Duration: " + multimedia_player.duration.toFixed(2) + " seconds<br>\
+      Duration: " + file_duration_final + "<br>\
+      Resolution: " + multimedia_player.videoWidth + " x " +
+      multimedia_player.videoHeight + "<br>\
+      Audio: " + undefined + "<br>\
+      Bitrate: " + undefined + "<br>\
       ";
   },500);
 }
